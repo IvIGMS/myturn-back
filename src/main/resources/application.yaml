@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5442/myturn
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  application:
+    name: heg
+
+application:
+  security:
+    jwt:
+      secret-key: "unasecretamuylargaunasecretamuylargaunasecretamuylarga1234"
+      expiration: 86400000
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+
+activate:
+  user:
+    mocked: true
+openai:
+  api:
+    key: ${API_KEY}

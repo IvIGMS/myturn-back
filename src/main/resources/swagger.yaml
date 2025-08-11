@@ -1,0 +1,355 @@
+openapi: 3.0.2
+info:
+  title: MyTurnApp
+  version: v1
+tags:
+  - name: auth
+    description: Endpoints de autenticación
+security:
+  - bearerAuth: []
+paths:
+  /users/get-self:
+    get:
+      summary: Get user-self
+      operationId: getSelfUser
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseUserDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /login:
+    post:
+      summary: Login de un user
+      operationId: login
+      requestBody:
+        $ref: '#/components/requestBodies/AuthenticationRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthenticationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - auth
+  /register:
+    post:
+      summary: Register de un user
+      operationId: register
+      requestBody:
+        $ref: '#/components/requestBodies/RegisterRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthenticationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - auth
+components:
+  requestBodies:
+    AuthenticationRequestBody:
+      description: Login de un user
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthenticationRequestDTO'
+          example:
+            email: "usuario@ejemplo.com"
+            password: "123456"
+    RegisterRequestBody:
+      description: Registrar un user
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterRequestDTO'
+  parameters:
+    pageNumberQueryParam:
+      name: pageNumberQueryParam
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/pageNumberQueryParam'
+    pageSizeQueryParam:
+      name: pageSizeQueryParam
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/pageSizeQueryParam'
+    nameQueryParam:
+      name: nameQueryParam
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/nameQueryParam'
+    sortByQueryParam:
+      name: sortByQueryParam
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/sortByQueryParam'
+  responses:
+    ListUsersResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserDTO'
+    AuthenticationResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthenticationDTO'
+    ResponseListUserDTO:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserDTO'
+    ResponseUserDTO:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserDTO'
+    PagedResponseUserDTO:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PagedResponseUserDTO'
+    NoContent:
+      description: No Content
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Problem'
+          example:
+            '400':
+              value:
+                type: 'https://api.example.com/problems/validation-error'
+                status: 400
+                title: Validation Error
+                detail: >-
+                  One or more fields are invalid. See details for more information.
+                instance: 'https://api.example.com/problems/validation-error/12345'
+    Unauthorized:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Problem'
+          example:
+            '400':
+              value:
+                type: 'https://api.example.com/problems/validation-error'
+                status: 401
+                title: Validation Error
+                detail: >-
+                  One or more fields are invalid. See details for more information.
+                instance: 'https://api.example.com/problems/validation-error/12345'
+    Forbidden:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Problem'
+          example:
+            '400':
+              value:
+                type: 'https://api.example.com/problems/validation-error'
+                status: 403
+                title: Validation Error
+                detail: >-
+                  One or more fields are invalid. See details for more information.
+                instance: 'https://api.example.com/problems/validation-error/12345'
+    NotFound:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Problem'
+          example:
+            '400':
+              value:
+                type: 'https://api.example.com/problems/validation-error'
+                status: 404
+                title: Validation Error
+                detail: >-
+                  One or more fields are invalid. See details for more information.
+                instance: 'https://api.example.com/problems/validation-error/12345'
+    UnexpectedError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Problem'
+          example:
+            '400':
+              value:
+                type: 'https://api.example.com/problems/validation-error'
+                status: 404
+                title: Validation Error
+                detail: >-
+                  One or more fields are invalid. See details for more information.
+                instance: 'https://api.example.com/problems/validation-error/12345'
+  schemas:
+    PagedResponseUserDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+        number:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 25
+        totalElements:
+          type: integer
+          format: int64
+          example: 232
+        totalPages:
+          type: integer
+          example: 23
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+        email:
+          type: string
+          example: user@user.com
+        firstname:
+          type: string
+          example: Luis
+        lastname:
+          type: string
+          example: Perez
+        isEmailActive:
+          type: boolean
+          example: false
+
+        role:
+          type: string
+          example: USER
+    AuthenticationRequestDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          example: friasgilivan@gmail.com
+        password:
+          type: string
+          example: 123456
+    RegisterRequestDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          example: friasgilivan@gmail.com
+        password:
+          type: string
+          example: 123456
+        firstname:
+          type: string
+          example: 123456
+        lastname:
+          type: string
+          example: 123456
+        role:
+          $ref: '#/components/schemas/Role'
+    AuthenticationDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbW...
+    Role:
+      type: string
+      enum:
+        - USER
+        - ADMIN
+      description: Role de los users de la app
+    Problem:
+      type: object
+      properties:
+        error:
+          type: string
+    userId:
+      title: example
+      description: example
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 999999999999
+      example: 1
+    sortByQueryParam:
+      type: string
+      example: "productName"
+    pageNumberQueryParam:
+      title: example
+      description: example
+      type: integer
+      minimum: 1
+      maximum: 99999
+      example: 1
+    pageSizeQueryParam:
+      title: example
+      description: example
+      type: integer
+      minimum: 1
+      maximum: 99999
+      example: 1
+    nameQueryParam:
+      type: string
+      example: "Joaquin"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
