@@ -30,4 +30,7 @@ public class CompanyEntity {
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<UserEntity> users = new ArrayList<>();
+
+    @Column(nullable = false, unique = true)
+    private String linkCode;
 }

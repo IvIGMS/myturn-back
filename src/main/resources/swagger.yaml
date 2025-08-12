@@ -600,6 +600,9 @@ components:
           type: integer
           format: int64
           example: 123
+        linkCode:
+          type: string
+          example: "eK408wX6pf"
       required:
         - id
         - name

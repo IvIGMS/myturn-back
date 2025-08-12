@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Objects;
 
 @Service
@@ -37,6 +38,7 @@ public class CompanyService {
         CompanyEntity companyToSave = CompanyEntity.builder()
                 .name(createCompany.getName())
                 .owner(user)
+                .linkCode(createLinkCode())
                 .build();
 
         CompanyEntity currentCompany = companyRepository.save(companyToSave);
@@ -49,5 +51,15 @@ public class CompanyService {
                 .orElseThrow(() -> new NotFoundException("Company not found: " + companyId));
 
         return modelMapper.map(company, CompanyDTO.class);
+    }
+
+    private String createLinkCode() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 }
