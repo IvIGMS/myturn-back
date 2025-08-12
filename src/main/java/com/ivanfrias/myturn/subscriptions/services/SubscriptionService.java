@@ -1,6 +1,7 @@
 package com.ivanfrias.myturn.subscriptions.services;
 
 import com.ivanfrias.myturn.common.exceptions.NotFoundException;
+import com.ivanfrias.myturn.security.services.UserService;
 import com.ivanfrias.myturn.subscriptions.dao.models.entities.SubscriptionEntity;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
 import com.ivanfrias.myturn.subscriptions.dao.repositories.SubscriptionRepository;
@@ -21,16 +22,16 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final UserService userService;
 
     @Transactional
     public SubscriptionDTO createSubscription(Long userId, LocalDate startDate, int durationInMonths) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId));
+        UserEntity user = userService.getUserEntityById(userId);
 
         LocalDate endDate = startDate.plusMonths(durationInMonths);
 
         SubscriptionEntity subscription = SubscriptionEntity.builder()
-                .userId(userId)
+                .user(user)
                 .startDate(startDate)
                 .endDate(endDate)
                 .user(user)

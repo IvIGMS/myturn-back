@@ -41,7 +41,4 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoleEnum role;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SubscriptionEntity> subscriptions = new ArrayList<>();
 }
