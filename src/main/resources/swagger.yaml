@@ -7,6 +7,8 @@ tags:
     description: Endpoints de autenticación
   - name: subscriptions
     description: Endpoints de gestión de suscripciones
+  - name: companies
+    description: Endpoints de gestión de empresas
 security:
   - bearerAuth: []
 paths:
@@ -132,6 +134,46 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       tags:
         - subscriptions
+  /companies:
+    post:
+      summary: Crear nueva empresa
+      operationId: createCompany
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCompanyRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/CompanyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - companies
+  /companies/{companyId}:
+    get:
+      summary: Obtener empresa por ID
+      operationId: getCompanyById
+      parameters:
+        - $ref: '#/components/parameters/companyIdPathParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/CompanyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - companies
 components:
   requestBodies:
     AuthenticationRequestBody:
@@ -162,6 +204,16 @@ components:
             userId: 123
             startDate: "2024-01-01"
             durationInMonths: 12
+    CreateCompanyRequestBody:
+      description: Crear nueva empresa
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCompanyRequestDTO'
+          example:
+            name: "Mi Empresa S.L."
+            ownerId: 123
   parameters:
     pageNumberQueryParam:
       name: pageNumberQueryParam
@@ -196,6 +248,13 @@ components:
         format: int64
     subscriptionIdPathParam:
       name: subscriptionId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    companyIdPathParam:
+      name: companyId
       in: path
       required: true
       schema:
@@ -244,6 +303,20 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/SubscriptionDTO'
+    CompanyResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CompanyDTO'
+    CompanyListResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/CompanyDTO'
     PagedResponseUserDTO:
       description: OK.
       content:
@@ -500,6 +573,37 @@ components:
         - userId
         - startDate
         - endDate
+    CreateCompanyRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Mi Empresa S.L."
+        ownerId:
+          type: integer
+          format: int64
+          example: 123
+      required:
+        - name
+        - ownerId
+    CompanyDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Mi Empresa S.L."
+        ownerId:
+          type: integer
+          format: int64
+          example: 123
+      required:
+        - id
+        - name
+        - ownerId
   securitySchemes:
     bearerAuth:
       type: http

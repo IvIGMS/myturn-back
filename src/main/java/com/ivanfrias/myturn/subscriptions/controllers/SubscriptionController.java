@@ -25,7 +25,7 @@ public class SubscriptionController implements SubscriptionsApi {
             createSubscriptionRequestDTO.getStartDate(), 
             createSubscriptionRequestDTO.getDurationInMonths()
         );
-        return ResponseEntity.ok(subscriptionDTO);
+        return ResponseEntity.created(null).body(subscriptionDTO);
     }
 
     @Override
