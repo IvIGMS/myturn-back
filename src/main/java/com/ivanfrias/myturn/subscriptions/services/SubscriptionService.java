@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +27,16 @@ public class SubscriptionService {
 
     @Transactional
     public SubscriptionDTO createSubscription(Long userId, LocalDate startDate, int durationInMonths) {
+        // Si es nueva suscripcion o ha expirado
         UserEntity user = userService.getUserEntityById(userId);
-
         LocalDate endDate = startDate.plusMonths(durationInMonths);
+
+        LocalDate availableDate = isAvailableYet(userId);
+        // Si ya hay una activa
+        if(Objects.nonNull(availableDate)) {
+            startDate = availableDate.plusDays(1);
+            endDate = startDate.plusMonths(durationInMonths);
+        }
 
         SubscriptionEntity subscription = SubscriptionEntity.builder()
                 .user(user)
@@ -38,6 +46,11 @@ public class SubscriptionService {
 
         SubscriptionEntity savedSubscription = subscriptionRepository.save(subscription);
         return modelMapper.map(savedSubscription, SubscriptionDTO.class);
+    }
+
+    private LocalDate isAvailableYet(Long userId) {
+        LocalDate currentDate = LocalDate.now();
+        return subscriptionRepository.isAvailableYet(userId, currentDate);
     }
 
     public List<SubscriptionDTO> getSubscriptionsByUserId(Long userId) {
