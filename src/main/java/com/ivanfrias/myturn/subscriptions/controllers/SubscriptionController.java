@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1")
 @RequiredArgsConstructor
@@ -24,5 +26,10 @@ public class SubscriptionController implements SubscriptionsApi {
             createSubscriptionRequestDTO.getDurationInMonths()
         );
         return ResponseEntity.ok(subscriptionDTO);
+    }
+
+    @Override
+    public ResponseEntity<List<SubscriptionDTO>> getSubscriptionsByUserId(Long userId) {
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsByUserId(userId));
     }
 }

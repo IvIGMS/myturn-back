@@ -90,6 +90,27 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       tags:
         - subscriptions
+  /subscriptions/user/{userId}:
+    get:
+      summary: Obtener suscripciones de un usuario
+      operationId: getSubscriptionsByUserId
+      parameters:
+        - $ref: '#/components/parameters/userIdPathParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/SubscriptionListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - subscriptions
 components:
   requestBodies:
     AuthenticationRequestBody:
@@ -145,6 +166,13 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/sortByQueryParam'
+    userIdPathParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
   responses:
     ListUsersResponse:
       description: OK.
@@ -180,6 +208,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/SubscriptionDTO'
+    SubscriptionListResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/SubscriptionDTO'
     PagedResponseUserDTO:
       description: OK.
       content:

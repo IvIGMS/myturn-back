@@ -34,19 +34,29 @@ public class SubscriptionService {
                 .user(user)
                 .startDate(startDate)
                 .endDate(endDate)
-                .user(user)
                 .build();
 
         SubscriptionEntity savedSubscription = subscriptionRepository.save(subscription);
         return modelMapper.map(savedSubscription, SubscriptionDTO.class);
     }
 
-    public List<SubscriptionEntity> getSubscriptionsByUserId(Long userId) {
-        return subscriptionRepository.findByUserIdOrderByStartDateDesc(userId);
+    public List<SubscriptionDTO> getSubscriptionsByUserId(Long userId) {
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findByUserIdOrderByStartDateDesc(userId);
+        return subscriptions.stream()
+                .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
+                .toList();
     }
 
-    public SubscriptionEntity getSubscriptionById(Long subscriptionId) {
-        return subscriptionRepository.findById(subscriptionId)
+    public SubscriptionDTO getSubscriptionById(Long subscriptionId) {
+        SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new NotFoundException("Suscripción no encontrada con ID: " + subscriptionId));
+        return modelMapper.map(subscription, SubscriptionDTO.class);
+    }
+
+    public List<SubscriptionDTO> getAllSubscriptions() {
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findAll();
+        return subscriptions.stream()
+                .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
+                .toList();
     }
 }
