@@ -41,7 +41,8 @@ public class SubscriptionService {
     }
 
     public List<SubscriptionDTO> getSubscriptionsByUserId(Long userId) {
-        List<SubscriptionEntity> subscriptions = subscriptionRepository.findByUserIdOrderByStartDateDesc(userId);
+        UserEntity user = userService.getUserEntityById(userId);
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findByUserIdOrderByStartDateDesc(user.getId());
         return subscriptions.stream()
                 .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
                 .toList();
@@ -51,12 +52,5 @@ public class SubscriptionService {
         SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new NotFoundException("Suscripción no encontrada con ID: " + subscriptionId));
         return modelMapper.map(subscription, SubscriptionDTO.class);
-    }
-
-    public List<SubscriptionDTO> getAllSubscriptions() {
-        List<SubscriptionEntity> subscriptions = subscriptionRepository.findAll();
-        return subscriptions.stream()
-                .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
-                .toList();
     }
 }

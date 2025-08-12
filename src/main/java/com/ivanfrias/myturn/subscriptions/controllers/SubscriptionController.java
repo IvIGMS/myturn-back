@@ -32,4 +32,9 @@ public class SubscriptionController implements SubscriptionsApi {
     public ResponseEntity<List<SubscriptionDTO>> getSubscriptionsByUserId(Long userId) {
         return ResponseEntity.ok(subscriptionService.getSubscriptionsByUserId(userId));
     }
+
+    @Override
+    public ResponseEntity<SubscriptionDTO> getSubscriptionById(Long subscriptionId) {
+        return ResponseEntity.ok(subscriptionService.getSubscriptionById(subscriptionId));
+    }
 }
