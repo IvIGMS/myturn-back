@@ -483,6 +483,10 @@ components:
           type: integer
           format: int64
           example: 123
+        companyId:
+          type: integer
+          format: int64
+          example: 123
         startDate:
           type: string
           format: date

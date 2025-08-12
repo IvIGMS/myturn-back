@@ -39,7 +39,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
-                .isActive(false)
+                .isActive(true) // todo: cambair esto a false para tener que activarla
                 .role(RoleEnum.valueOf(request.getRole().getValue()))
                 .build();
         userRepository.save(user);

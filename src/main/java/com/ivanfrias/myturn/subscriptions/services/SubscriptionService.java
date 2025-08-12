@@ -1,6 +1,8 @@
 package com.ivanfrias.myturn.subscriptions.services;
 
+import com.ivanfrias.myturn.common.exceptions.ConflictException;
 import com.ivanfrias.myturn.common.exceptions.NotFoundException;
+import com.ivanfrias.myturn.companies.dao.models.entities.CompanyEntity;
 import com.ivanfrias.myturn.security.services.UserService;
 import com.ivanfrias.myturn.subscriptions.dao.models.entities.SubscriptionEntity;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
@@ -21,7 +23,6 @@ import java.util.Objects;
 public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
-    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
 
@@ -29,6 +30,10 @@ public class SubscriptionService {
     public SubscriptionDTO createSubscription(Long userId, LocalDate startDate, int durationInMonths) {
         // Si es nueva suscripcion o ha expirado
         UserEntity user = userService.getUserEntityById(userId);
+        if(Objects.isNull(user.getCompany())) {
+            throw new ConflictException("El usuario para el que se va a crear una suscripción aún no tiene una empresa asignada");
+        }
+
         LocalDate endDate = startDate.plusMonths(durationInMonths);
 
         LocalDate availableDate = isAvailableYet(userId);
@@ -40,6 +45,7 @@ public class SubscriptionService {
 
         SubscriptionEntity subscription = SubscriptionEntity.builder()
                 .user(user)
+                .company(user.getCompany())
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();

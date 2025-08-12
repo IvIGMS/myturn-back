@@ -1,5 +1,6 @@
 package com.ivanfrias.myturn.subscriptions.dao.models.entities;
 
+import com.ivanfrias.myturn.companies.dao.models.entities.CompanyEntity;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,8 @@ public class SubscriptionEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "company_id", nullable = false)
+    private CompanyEntity company;
 }
