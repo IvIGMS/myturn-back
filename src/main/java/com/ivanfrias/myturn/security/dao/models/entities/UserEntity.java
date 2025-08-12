@@ -1,6 +1,7 @@
 package com.ivanfrias.myturn.security.dao.models.entities;
 
 import com.ivanfrias.myturn.security.dao.models.enums.RoleEnum;
+import com.ivanfrias.myturn.subscriptions.dao.models.entities.SubscriptionEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "users")
@@ -39,4 +41,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoleEnum role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SubscriptionEntity> subscriptions = new ArrayList<>();
 }
