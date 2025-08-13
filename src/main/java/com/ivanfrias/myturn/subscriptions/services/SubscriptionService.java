@@ -3,6 +3,7 @@ package com.ivanfrias.myturn.subscriptions.services;
 import com.ivanfrias.myturn.common.exceptions.ConflictException;
 import com.ivanfrias.myturn.common.exceptions.NotFoundException;
 import com.ivanfrias.myturn.companies.dao.models.entities.CompanyEntity;
+import com.ivanfrias.myturn.companies.services.CompanyService;
 import com.ivanfrias.myturn.security.services.UserService;
 import com.ivanfrias.myturn.subscriptions.dao.models.entities.SubscriptionEntity;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
@@ -25,13 +26,20 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final CompanyService companyService;
 
     @Transactional
-    public SubscriptionDTO createSubscription(Long userId, LocalDate startDate, int durationInMonths) {
+    public SubscriptionDTO createSubscription(Long userId, LocalDate startDate, int durationInMonths, Long ownerId) {
         // Si es nueva suscripcion o ha expirado
         UserEntity user = userService.getUserEntityById(userId);
+        CompanyEntity ownerCompany = companyService.findCompanyEntityByOwnerId(ownerId);
+
         if(Objects.isNull(user.getCompany())) {
             throw new ConflictException("El usuario para el que se va a crear una suscripción aún no tiene una empresa asignada");
+        }
+
+        if (!user.getCompany().getId().equals(ownerCompany.getId())) {
+            throw new ConflictException("El usuario no pertenece a la misma empresa que el administrador, no tiene permisos para crear suscripciones");
         }
 
         LocalDate endDate = startDate.plusMonths(durationInMonths);
