@@ -29,6 +29,27 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /users/link-company/{linkedCode}:
+    patch:
+      summary: Vincular usuario con empresa
+      operationId: linkUserToCompany
+      parameters:
+        - $ref: '#/components/parameters/linkedCodePathParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - users
   /login:
     post:
       summary: Login de un user
@@ -214,6 +235,7 @@ components:
           example:
             name: "Mi Empresa S.L."
             ownerId: 123
+
   parameters:
     pageNumberQueryParam:
       name: pageNumberQueryParam
@@ -239,6 +261,12 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/sortByQueryParam'
+    linkedCodePathParam:
+      name: linkedCodePathParam
+      in: path
+      required: true
+      schema:
+        type: string
     userIdPathParam:
       name: userId
       in: path
@@ -579,13 +607,8 @@ components:
         name:
           type: string
           example: "Mi Empresa S.L."
-        ownerId:
-          type: integer
-          format: int64
-          example: 123
       required:
         - name
-        - ownerId
     CompanyDTO:
       type: object
       properties:
@@ -607,6 +630,7 @@ components:
         - id
         - name
         - ownerId
+
   securitySchemes:
     bearerAuth:
       type: http

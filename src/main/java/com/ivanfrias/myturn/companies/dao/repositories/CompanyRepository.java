@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CompanyRepository extends JpaRepository<CompanyEntity, Long> {
     Optional<CompanyEntity> findByOwner_id(Long ownerId);
+    Optional<CompanyEntity> findByLinkCode(String linkCode);
 }
 
