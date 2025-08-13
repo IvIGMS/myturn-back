@@ -34,6 +34,18 @@ public class CompanyController extends ControllerUtils implements CompaniesApi {
 
     @Override
     public ResponseEntity<CompanyDTO> getCompanyById(Long companyId) {
+        if(!checkIsAdmin()){
+            throw new UnauthorizedException(STRING_NO_PREMISSIONS);
+        }
         return ResponseEntity.ok(companyService.getCompanyById(companyId));
+    }
+
+    @Override
+    public ResponseEntity<CompanyDTO> getSelfCompany() {
+        if(!checkIsAdmin()){
+            throw new UnauthorizedException(STRING_NO_PREMISSIONS);
+        }
+        Long userId = getAllClaims().get("user_id", Long.class);
+        return ResponseEntity.ok(companyService.findCompanyByOwnerId(userId));
     }
 }

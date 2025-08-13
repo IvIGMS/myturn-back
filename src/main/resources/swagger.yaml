@@ -29,7 +29,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /users/link-company/{linkedCode}:
+  /users/link-company/{linkedCodePathParam}:
     patch:
       summary: Vincular usuario con empresa
       operationId: linkUserToCompany
@@ -180,6 +180,25 @@ paths:
       operationId: getCompanyById
       parameters:
         - $ref: '#/components/parameters/companyIdPathParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/CompanyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - companies
+  /companies/get-self:
+    get:
+      summary: Obtener empresa propia
+      operationId: getSelfCompany
       responses:
         '200':
           $ref: '#/components/responses/CompanyResponse'

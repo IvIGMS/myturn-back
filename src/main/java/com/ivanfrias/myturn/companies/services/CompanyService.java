@@ -1,20 +1,12 @@
 package com.ivanfrias.myturn.companies.services;
 
-import com.ivanfrias.myturn.common.exceptions.ConflictException;
 import com.ivanfrias.myturn.common.exceptions.NotFoundException;
 import com.ivanfrias.myturn.companies.dao.models.entities.CompanyEntity;
 import com.ivanfrias.myturn.companies.dao.repositories.CompanyRepository;
 import com.ivanfrias.myturn.model.CompanyDTO;
-import com.ivanfrias.myturn.model.CreateCompanyRequestDTO;
-import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
-import com.ivanfrias.myturn.security.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +19,12 @@ public class CompanyService {
                 .orElseThrow(() -> new NotFoundException("Company not found: " + companyId));
     }
 
-    public CompanyEntity findByOwner_id(Long ownerId) {
+    public CompanyEntity findCompanyEntityByOwnerId(Long ownerId) {
         return companyRepository.findByOwner_id(ownerId).orElse(null);
+    }
+
+    public CompanyDTO findCompanyByOwnerId(Long ownerId) {
+        return modelMapper.map(findCompanyEntityByOwnerId(ownerId), CompanyDTO.class);
     }
 
     public CompanyDTO getCompanyById(Long companyId) {

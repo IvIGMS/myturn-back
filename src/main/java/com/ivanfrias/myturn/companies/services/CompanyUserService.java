@@ -7,6 +7,7 @@ import com.ivanfrias.myturn.model.CompanyDTO;
 import com.ivanfrias.myturn.model.CreateCompanyRequestDTO;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
 import com.ivanfrias.myturn.security.services.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CompanyUserService {
     private final ModelMapper modelMapper;
 
     public CompanyDTO createCompany(CreateCompanyRequestDTO createCompany, Long userId) {
-        CompanyEntity company = companyService.findByOwner_id(userId);
+        CompanyEntity company = companyService.findCompanyEntityByOwnerId(userId);
         UserEntity user = userService.getUserEntityById(userId);
 
         if (Objects.nonNull(company)) {
@@ -50,7 +51,10 @@ public class CompanyUserService {
         return sb.toString();
     }
 
+    @Transactional
     public void linkUserToCompany(Long userId, String linkedCode) {
-        // Todo: hacer esto del link obteniendo la company y luego haciendo el patch
+        UserEntity user = userService.getUserEntityById(userId);
+        CompanyEntity company = companyService.getCompanyByLinkedCode(linkedCode);
+        user.setCompany(company);
     }
 }

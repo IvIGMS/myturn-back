@@ -33,7 +33,6 @@ public class UserController extends ControllerUtils implements UsersApi {
         }
         Long userId = getAllClaims().get("user_id", Long.class);
         companyUserService.linkUserToCompany(userId, linkedCode);
-
         return ResponseEntity.noContent().build();
     }
 }
