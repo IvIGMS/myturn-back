@@ -42,4 +42,9 @@ public class UserService {
                 .map(ue -> modelMapper.map(ue, UserDTO.class))
                 .toList();
     }
+
+    public List<UserDTO> getUsersByOwner(Long ownerId) {
+        List<UserEntity> users = userRepository.getUsersByOwnerId(ownerId);
+        return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
+    }
 }

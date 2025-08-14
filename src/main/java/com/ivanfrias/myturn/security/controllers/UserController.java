@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static com.ivanfrias.myturn.common.exceptions.utils.ControllerUtilsConstants.STRING_NO_PREMISSIONS;
 
 @RestController
@@ -34,5 +36,14 @@ public class UserController extends ControllerUtils implements UsersApi {
         Long userId = getAllClaims().get("user_id", Long.class);
         companyUserService.linkUserToCompany(userId, linkedCode);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<UserDTO>> getUsersByOwner() {
+        if(!checkIsAdmin()){
+            throw new UnauthorizedException(STRING_NO_PREMISSIONS);
+        }
+        Long ownerId = getAllClaims().get("user_id", Long.class);
+        return ResponseEntity.ok(userService.getUsersByOwner(ownerId));
     }
 }
