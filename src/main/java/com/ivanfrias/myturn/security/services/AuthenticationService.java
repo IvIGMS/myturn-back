@@ -7,7 +7,7 @@ import com.ivanfrias.myturn.model.RegisterRequestDTO;
 import com.ivanfrias.myturn.model.Role;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
 import com.ivanfrias.myturn.security.dao.models.enums.RoleEnum;
-import com.ivanfrias.myturn.security.dao.repositories.UserRepository;
+import com.ivanfrias.myturn.users.dao.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;

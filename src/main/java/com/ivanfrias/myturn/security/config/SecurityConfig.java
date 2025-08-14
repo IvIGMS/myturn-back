@@ -1,6 +1,6 @@
 package com.ivanfrias.myturn.security.config;
 
-import com.ivanfrias.myturn.security.dao.repositories.UserRepository;
+import com.ivanfrias.myturn.users.dao.repositories.UserRepository;
 import com.ivanfrias.myturn.security.services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

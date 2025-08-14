@@ -1,11 +1,11 @@
-package com.ivanfrias.myturn.security.controllers;
+package com.ivanfrias.myturn.users.controllers;
 
 import com.ivanfrias.myturn.api.UsersApi;
 import com.ivanfrias.myturn.common.exceptions.utils.ControllerUtils;
 import com.ivanfrias.myturn.common.exceptions.utils.UnauthorizedException;
 import com.ivanfrias.myturn.companies.services.CompanyUserService;
 import com.ivanfrias.myturn.model.UserDTO;
-import com.ivanfrias.myturn.security.services.UserService;
+import com.ivanfrias.myturn.users.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

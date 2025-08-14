@@ -1,14 +1,12 @@
-package com.ivanfrias.myturn.security.services;
+package com.ivanfrias.myturn.users.services;
 
 import com.ivanfrias.myturn.common.exceptions.NotFoundException;
 import com.ivanfrias.myturn.model.UserDTO;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
-import com.ivanfrias.myturn.security.dao.models.enums.RoleEnum;
-import com.ivanfrias.myturn.security.dao.repositories.UserRepository;
+import com.ivanfrias.myturn.users.dao.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,16 +29,6 @@ public class UserService {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found: " + userId));
         return modelMapper.map(user, UserDTO.class);
-    }
-
-    public List<UserDTO> getUsers() {
-        List<UserEntity> entityUsers = userRepository.findAllByRole(RoleEnum.USER);
-        if(entityUsers.isEmpty()){
-            throw new NotFoundException("No hay ningún usuario con role USER registrado");
-        }
-        return entityUsers.stream()
-                .map(ue -> modelMapper.map(ue, UserDTO.class))
-                .toList();
     }
 
     public List<UserDTO> getUsersByOwner(Long ownerId) {
