@@ -6,7 +6,7 @@ import com.ivanfrias.myturn.companies.dao.models.entities.CompanyEntity;
 import com.ivanfrias.myturn.model.CompanyDTO;
 import com.ivanfrias.myturn.model.CreateCompanyRequestDTO;
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
-import com.ivanfrias.myturn.security.services.UserService;
+import com.ivanfrias.myturn.users.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
