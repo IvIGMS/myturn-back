@@ -22,7 +22,7 @@ application:
   security:
     jwt:
       secret-key: "unasecretamuylargaunasecretamuylargaunasecretamuylarga1234"
-      expiration: 86400000
+      expiration: 864000000
 
 logging:
   level:
