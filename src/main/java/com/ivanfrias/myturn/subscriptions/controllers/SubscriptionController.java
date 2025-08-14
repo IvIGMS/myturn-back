@@ -40,7 +40,11 @@ public class SubscriptionController extends ControllerUtils implements Subscript
 
     @Override
     public ResponseEntity<List<SubscriptionDTO>> getSubscriptionsByUserId(Long userId) {
-        return ResponseEntity.ok(subscriptionService.getSubscriptionsByUserId(userId));
+        if(!checkIsAdmin()){
+            throw new UnauthorizedException(STRING_NO_PREMISSIONS);
+        }
+        Long ownerId = getAllClaims().get("user_id", Long.class);
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsByUserId(userId, ownerId));
     }
 
     @Override
