@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -41,5 +43,9 @@ public class CompanyService {
     public CompanyEntity getCompanyByLinkedCode(String linkCode) {
         return companyRepository.findByLinkCode(linkCode)
                 .orElseThrow(() -> new NotFoundException("Company not found by linked code: " + linkCode));
+    }
+
+    public List<CompanyEntity> findAll() {
+        return companyRepository.findAll();
     }
 }

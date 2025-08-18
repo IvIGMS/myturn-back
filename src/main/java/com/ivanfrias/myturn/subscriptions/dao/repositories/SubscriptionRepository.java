@@ -27,5 +27,16 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
                            @Param("currentDate") LocalDate currentDate
     );
 
+    @Query(value = """
+            select s.id from subscriptions s
+            where s.company_id = :companyId
+            and s.user_id = :userId
+            and s.is_active = true
+    """, nativeQuery = true)
+    List<Long> disableSubscriptionByCompanyAndUserId(
+            @Param("companyId") Long CompanyId,
+            @Param("userId") Long userId
+    );
+
 }
 

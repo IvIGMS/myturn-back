@@ -35,4 +35,7 @@ public class SubscriptionEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

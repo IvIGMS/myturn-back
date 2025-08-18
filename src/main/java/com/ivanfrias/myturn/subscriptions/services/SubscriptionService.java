@@ -52,6 +52,7 @@ public class SubscriptionService {
                 .company(user.getCompany())
                 .startDate(startDate)
                 .endDate(endDate)
+                .isActive(true)
                 .build();
 
         SubscriptionEntity savedSubscription = subscriptionRepository.save(subscription);
@@ -92,5 +93,16 @@ public class SubscriptionService {
         if (!user.getCompany().getId().equals(ownerCompany.getId())) {
             throw new ConflictException("El usuario no pertenece a la misma empresa que el administrador, no tiene permisos para crear suscripciones");
         }
+    }
+
+    @Transactional
+    public void disableSubscription(Long companyId, Long userId) {
+        List<Long> idList = subscriptionRepository.disableSubscriptionByCompanyAndUserId(companyId, userId);
+
+        idList.stream().forEach(id -> {
+            SubscriptionEntity subscription = subscriptionRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Subscription not found: " + companyId));
+            subscription.setIsActive(false);
+        });
     }
 }
