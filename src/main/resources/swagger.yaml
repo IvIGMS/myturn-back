@@ -482,6 +482,24 @@ components:
                   One or more fields are invalid. See details for more information.
                 instance: 'https://api.example.com/problems/validation-error/12345'
   schemas:
+    NotificationDto:
+      type: object
+      properties:
+        emailTo:
+          type: string
+          example: user@user.com
+        subject:
+          type: string
+          example: Notificación suscripción
+        text:
+          type: string
+          example: Texto de ejemplo del correo
+        notificationType:
+          type: string
+          example: END_SUBSCRIPTION
+        isSended:
+          type: boolean
+          example: false
     PagedResponseUserDTO:
       type: object
       properties:
@@ -521,7 +539,6 @@ components:
         isEmailActive:
           type: boolean
           example: false
-
         role:
           type: string
           example: USER
