@@ -4,6 +4,7 @@ import com.ivanfrias.myturn.companies.services.CompanyService;
 import com.ivanfrias.myturn.model.CompanyDTO;
 import com.ivanfrias.myturn.model.NotificationDto;
 import com.ivanfrias.myturn.model.UserDTO;
+import com.ivanfrias.myturn.notifications.dao.models.entities.NotificationEntity;
 import com.ivanfrias.myturn.notifications.dao.models.enums.NotificationTypeEnum;
 import com.ivanfrias.myturn.notifications.services.NotificationService;
 import com.ivanfrias.myturn.subscriptions.services.SubscriptionService;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,9 @@ public class JobScheduled {
     private final NotificationService notificationService;
     private final SubscriptionService subscriptionService;
 
-    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Madrid")
-    //@Scheduled(fixedRate = 10000_000, initialDelay = 5_000)
+    //@Scheduled(cron = "0 0 1 * * *", zone = "Europe/Madrid")
+    @Transactional
+    @Scheduled(fixedRate = 10000_000, initialDelay = 5_000)
     public void createNotifications() {
         List<UserDownDto> userDownToday = userService.usersDownToday();
 
@@ -69,8 +72,11 @@ public class JobScheduled {
                 .build();
     }
 
-    @Scheduled(cron = "0 0 9 * * *", zone = "Europe/Madrid")
+    //@Scheduled(cron = "0 0 9 * * *", zone = "Europe/Madrid")
+    @Transactional
+    @Scheduled(fixedRate = 10000_000, initialDelay = 30_000)
     public void sendNotifications() {
-        // todo: hacer el send
+        List<NotificationEntity> notifications = notificationService.getNotificationsNotSendedByType(NotificationTypeEnum.END_SUBSCRIPTION);
+        notificationService.sendNotifications(notifications);
     }
 }
