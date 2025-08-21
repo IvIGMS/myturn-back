@@ -8,9 +8,6 @@ permissions:
   contents: read
   packages: write           # necesario para publicar en GHCR con GITHUB_TOKEN
 
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/myturn-back-api
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest  # runner efímero que pone GitHub
@@ -21,6 +18,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Compute IMAGE_NAME (lowercase owner)
+        run: |
+          OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=ghcr.io/${OWNER_LC}/myturn-back-api" >> $GITHUB_ENV
 
       - name: Login to GHCR with GITHUB_TOKEN
         uses: docker/login-action@v3
