@@ -20,9 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Value("${activate.user.mocked}")
-    private boolean isUserMocked;
-
     public UserEntity getUserEntityById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found: " + userId));

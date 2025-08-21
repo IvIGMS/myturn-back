@@ -5,8 +5,8 @@ spring:
   mail:
     host: smtp-relay.brevo.com
     port: 587
-    username: ${BREVO_SMTP_USER:95021f001@smtp-brevo.com}
-    password: ${BREVO_SMTP_KEY:rxLODC8YkGEvTQng}
+    username: ${BREVO_SMTP_USER}
+    password: ${BREVO_SMTP_KEY}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -14,25 +14,21 @@ spring:
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
   datasource:
-    url: jdbc:postgresql://localhost:5442/myturn
-    username: user
-    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      #ddl-auto: create-drop
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
   application:
-    name: heg
+    name: myturn-back
 
 application:
   security:
     jwt:
-      secret-key: "unasecretamuylargaunasecretamuylargaunasecretamuylarga1234"
+      secret-key: ${JWT_KEY:}
       expiration: 864000000
 
 logging:
@@ -40,14 +36,8 @@ logging:
     root: INFO
     org.hibernate.SQL: DEBUG
 
-activate:
-  user:
-    mocked: true
-openai:
-  api:
-    key: ${API_KEY}
 app:
   mail:
-    smtp-from-name: ${SMTP_FROM_NAME}
-    smtp-from-email: ${SMTP_FROM_EMAIL}
-    is-email-mocked: ${IS_EMAIL_MOCKED}
+    smtp-from-name: ${SMTP_FROM_NAME:}
+    smtp-from-email: ${SMTP_FROM_EMAIL:}
+    is-email-mocked: ${IS_EMAIL_MOCKED:false}
