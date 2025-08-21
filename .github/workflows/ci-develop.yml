@@ -9,7 +9,7 @@ permissions:
   packages: write           # necesario para publicar en GHCR con GITHUB_TOKEN
 
 env:
-  IMAGE_NAME: ghcr.io/ivan-frias/myturn-back-api
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/myturn-back-api
 
 jobs:
   build-and-push:
