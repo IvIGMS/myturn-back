@@ -12,6 +12,23 @@ tags:
 security:
   - bearerAuth: []
 paths:
+  /users/test:
+    get:
+      summary: endpoint publico test
+      operationId: getTest
+      responses:
+        '200':
+          $ref: '#/components/responses/ReponseTest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /users:
     get:
       summary: Obtiene todos los usuarios ligados a la empresa de la que es dueño el admin que consumen este endpoint
@@ -332,6 +349,13 @@ components:
         type: integer
         format: int64
   responses:
+    ReponseTest:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: string
+            example: "test example test"
     ListUsersResponse:
       description: OK.
       content:

@@ -31,9 +31,9 @@ public class JobScheduled {
     private final NotificationService notificationService;
     private final SubscriptionService subscriptionService;
 
-    //@Scheduled(cron = "0 0 1 * * *", zone = "Europe/Madrid")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Madrid")
     @Transactional
-    @Scheduled(fixedRate = 10000_000, initialDelay = 5_000)
+    //@Scheduled(fixedRate = 10000_000, initialDelay = 5_000)
     public void createNotifications() {
         List<UserDownDto> userDownToday = userService.usersDownToday();
 
@@ -72,9 +72,9 @@ public class JobScheduled {
                 .build();
     }
 
-    //@Scheduled(cron = "0 0 9 * * *", zone = "Europe/Madrid")
+    @Scheduled(cron = "0 0 9 * * *", zone = "Europe/Madrid")
     @Transactional
-    @Scheduled(fixedRate = 10000_000, initialDelay = 30_000)
+    //@Scheduled(fixedRate = 10000_000, initialDelay = 30_000)
     public void sendNotifications() {
         List<NotificationEntity> notifications = notificationService.getNotificationsNotSendedByType(NotificationTypeEnum.END_SUBSCRIPTION);
         notificationService.sendNotifications(notifications);

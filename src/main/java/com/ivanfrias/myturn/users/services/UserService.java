@@ -44,4 +44,6 @@ public class UserService {
         LocalDate now = LocalDate.now();
         return userRepository.usersDownToday(now);
     }
+
+
 }
