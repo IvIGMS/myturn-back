@@ -46,4 +46,9 @@ public class UserController extends ControllerUtils implements UsersApi {
         Long ownerId = getAllClaims().get("user_id", Long.class);
         return ResponseEntity.ok(userService.getUsersByOwner(ownerId));
     }
+
+    @Override
+    public ResponseEntity<String> getTest() {
+        return ResponseEntity.ok("Esto es un simple test");
+    }
 }
