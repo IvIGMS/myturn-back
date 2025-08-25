@@ -49,6 +49,6 @@ public class UserController extends ControllerUtils implements UsersApi {
 
     @Override
     public ResponseEntity<String> getTest() {
-        return ResponseEntity.ok("Esto es un simple test con CD automatico");
+        return ResponseEntity.ok("Esto es un simple test con CD automatico  ");
     }
 }
