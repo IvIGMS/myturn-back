@@ -1,17 +1,16 @@
-name: CI - Build & Push image (develop)
+name: CI/CD - Build & Deploy (develop)
 
 on:
   push:
-    branches: ["develop"]   # ejecuta en cada push a develop
+    branches: ["develop"]
 
 permissions:
   contents: read
-  packages: write           # necesario para publicar en GHCR con GITHUB_TOKEN
+  packages: write
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest  # runner efímero que pone GitHub
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,9 +28,8 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}   # token automático del workflow
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # (Opcional) leer versión del pom para etiquetar
       - name: Set up Temurin JDK 21 (to read pom version)
         uses: actions/setup-java@v4
         with:
@@ -50,3 +48,29 @@ jobs:
             ${{ env.IMAGE_NAME }}:latest-develop
             ${{ env.IMAGE_NAME }}:develop-${{ github.sha }}
             ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            IMAGE="ghcr.io/${OWNER_LC}/myturn-back-api:latest-develop"
+
+            echo "Pulling latest image..."
+            docker pull $IMAGE
+
+            cd ~/myturn-dev
+
+            echo "Restarting API service..."
+            docker compose -f docker-compose.dev.yml up -d api
+
+            echo "Cleaning old images..."
+            docker image prune -f
