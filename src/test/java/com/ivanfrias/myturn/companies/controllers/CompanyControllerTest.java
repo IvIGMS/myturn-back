@@ -1,5 +1,10 @@
 package com.ivanfrias.myturn.companies.controllers;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import com.ivanfrias.myturn.common.exceptions.utils.UnauthorizedException;
 import com.ivanfrias.myturn.companies.services.CompanyService;
 import com.ivanfrias.myturn.companies.services.CompanyUserService;
@@ -18,115 +23,108 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class CompanyControllerTest extends AbstractControllerTest {
 
-    @InjectMocks
-    private CompanyController companyController;
+  @InjectMocks private CompanyController companyController;
 
-    @Mock
-    private CompanyService companyService;
+  @Mock private CompanyService companyService;
 
-    @Mock
-    private CompanyUserService companyUserService;
+  @Mock private CompanyUserService companyUserService;
 
-    @BeforeEach
-    void setup() {
-        ReflectionTestUtils.setField(companyController, "request", request);
-        ReflectionTestUtils.setField(companyController, "jwtService", jwtService);
+  @BeforeEach
+  void setup() {
+    ReflectionTestUtils.setField(companyController, "request", request);
+    ReflectionTestUtils.setField(companyController, "jwtService", jwtService);
+  }
+
+  @Nested
+  @DisplayName("createCompany Tests")
+  class CreateCompanyTests {
+
+    @Test
+    @DisplayName("Should create a company when user is admin")
+    void createCompany_asAdmin_shouldCreateCompany() {
+      mockAuthenticatedUser(1L, "ADMIN");
+      CreateCompanyRequestDTO requestDTO = new CreateCompanyRequestDTO();
+      CompanyDTO companyDTO = new CompanyDTO();
+      companyDTO.setId(1L);
+
+      when(companyUserService.createCompany(any(CreateCompanyRequestDTO.class), anyLong()))
+          .thenReturn(companyDTO);
+
+      ResponseEntity<CompanyDTO> response = companyController.createCompany(requestDTO);
+
+      assertEquals(HttpStatus.CREATED, response.getStatusCode());
+      assertNotNull(response.getBody());
+      assertEquals(1L, response.getBody().getId());
     }
 
-    @Nested
-    @DisplayName("createCompany Tests")
-    class CreateCompanyTests {
+    @Test
+    @DisplayName("Should throw UnauthorizedException when user is not admin")
+    void createCompany_asNonAdmin_shouldThrowUnauthorizedException() {
+      mockAuthenticatedUser(1L, "USER");
+      CreateCompanyRequestDTO requestDTO = new CreateCompanyRequestDTO();
 
-        @Test
-        @DisplayName("Should create a company when user is admin")
-        void createCompany_asAdmin_shouldCreateCompany() {
-            mockAuthenticatedUser(1L, "ADMIN");
-            CreateCompanyRequestDTO requestDTO = new CreateCompanyRequestDTO();
-            CompanyDTO companyDTO = new CompanyDTO();
-            companyDTO.setId(1L);
+      assertThrows(UnauthorizedException.class, () -> companyController.createCompany(requestDTO));
+    }
+  }
 
-            when(companyUserService.createCompany(any(CreateCompanyRequestDTO.class), anyLong())).thenReturn(companyDTO);
+  @Nested
+  @DisplayName("getCompanyById Tests")
+  class GetCompanyByIdTests {
 
-            ResponseEntity<CompanyDTO> response = companyController.createCompany(requestDTO);
+    @Test
+    @DisplayName("Should return a company when user is admin")
+    void getCompanyById_asAdmin_shouldReturnCompany() {
+      mockAuthenticatedUser(1L, "ADMIN");
+      CompanyDTO companyDTO = new CompanyDTO();
+      companyDTO.setId(1L);
 
-            assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(1L, response.getBody().getId());
-        }
+      when(companyService.getCompanyById(1L)).thenReturn(companyDTO);
 
-        @Test
-        @DisplayName("Should throw UnauthorizedException when user is not admin")
-        void createCompany_asNonAdmin_shouldThrowUnauthorizedException() {
-            mockAuthenticatedUser(1L, "USER");
-            CreateCompanyRequestDTO requestDTO = new CreateCompanyRequestDTO();
+      ResponseEntity<CompanyDTO> response = companyController.getCompanyById(1L);
 
-            assertThrows(UnauthorizedException.class, () -> companyController.createCompany(requestDTO));
-        }
+      assertEquals(HttpStatus.OK, response.getStatusCode());
+      assertNotNull(response.getBody());
+      assertEquals(1L, response.getBody().getId());
     }
 
-    @Nested
-    @DisplayName("getCompanyById Tests")
-    class GetCompanyByIdTests {
+    @Test
+    @DisplayName("Should throw UnauthorizedException when user is not admin")
+    void getCompanyById_asNonAdmin_shouldThrowUnauthorizedException() {
+      mockAuthenticatedUser(1L, "USER");
 
-        @Test
-        @DisplayName("Should return a company when user is admin")
-        void getCompanyById_asAdmin_shouldReturnCompany() {
-            mockAuthenticatedUser(1L, "ADMIN");
-            CompanyDTO companyDTO = new CompanyDTO();
-            companyDTO.setId(1L);
+      assertThrows(UnauthorizedException.class, () -> companyController.getCompanyById(1L));
+    }
+  }
 
-            when(companyService.getCompanyById(1L)).thenReturn(companyDTO);
+  @Nested
+  @DisplayName("getSelfCompany Tests")
+  class GetSelfCompanyTests {
 
-            ResponseEntity<CompanyDTO> response = companyController.getCompanyById(1L);
+    @Test
+    @DisplayName("Should return self company when user is admin")
+    void getSelfCompany_asAdmin_shouldReturnOwnCompany() {
+      mockAuthenticatedUser(1L, "ADMIN");
+      CompanyDTO companyDTO = new CompanyDTO();
+      companyDTO.setId(1L);
 
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(1L, response.getBody().getId());
-        }
+      when(companyService.findCompanyByOwnerId(1L)).thenReturn(companyDTO);
 
-        @Test
-        @DisplayName("Should throw UnauthorizedException when user is not admin")
-        void getCompanyById_asNonAdmin_shouldThrowUnauthorizedException() {
-            mockAuthenticatedUser(1L, "USER");
+      ResponseEntity<CompanyDTO> response = companyController.getSelfCompany();
 
-            assertThrows(UnauthorizedException.class, () -> companyController.getCompanyById(1L));
-        }
+      assertEquals(HttpStatus.OK, response.getStatusCode());
+      assertNotNull(response.getBody());
+      assertEquals(1L, response.getBody().getId());
     }
 
-    @Nested
-    @DisplayName("getSelfCompany Tests")
-    class GetSelfCompanyTests {
+    @Test
+    @DisplayName("Should throw UnauthorizedException when user is not admin")
+    void getSelfCompany_asNonAdmin_shouldThrowUnauthorizedException() {
+      mockAuthenticatedUser(1L, "USER");
 
-        @Test
-        @DisplayName("Should return self company when user is admin")
-        void getSelfCompany_asAdmin_shouldReturnOwnCompany() {
-            mockAuthenticatedUser(1L, "ADMIN");
-            CompanyDTO companyDTO = new CompanyDTO();
-            companyDTO.setId(1L);
-
-            when(companyService.findCompanyByOwnerId(1L)).thenReturn(companyDTO);
-
-            ResponseEntity<CompanyDTO> response = companyController.getSelfCompany();
-
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(1L, response.getBody().getId());
-        }
-
-        @Test
-        @DisplayName("Should throw UnauthorizedException when user is not admin")
-        void getSelfCompany_asNonAdmin_shouldThrowUnauthorizedException() {
-            mockAuthenticatedUser(1L, "USER");
-
-            assertThrows(UnauthorizedException.class, () -> companyController.getSelfCompany());
-        }
+      assertThrows(UnauthorizedException.class, () -> companyController.getSelfCompany());
     }
+  }
 }

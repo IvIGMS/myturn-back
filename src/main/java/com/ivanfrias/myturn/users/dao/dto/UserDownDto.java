@@ -10,9 +10,9 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 @Builder
 public class UserDownDto {
-    private String email;
-    private String name;
-    private String lastName;
-    private Long companyId;
-    private Long userId;
+  private String email;
+  private String name;
+  private String lastName;
+  private Long companyId;
+  private Long userId;
 }

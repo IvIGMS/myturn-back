@@ -10,8 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MyturnApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MyturnApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(MyturnApplication.class, args);
+  }
 }

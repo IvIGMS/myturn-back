@@ -10,25 +10,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public OpenAPI openAPI() {
-        final String securitySchemeName = "bearerAuth";
+  @Bean
+  public OpenAPI openAPI() {
+    final String securitySchemeName = "bearerAuth";
 
-        return new OpenAPI()
-                .info(new Info()
-                        .title("API - " + "Heg")
-                        .version("v1")
-                        .description("Documentación de la API"))
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                .components(
-                        new io.swagger.v3.oas.models.Components()
-                                .addSecuritySchemes(securitySchemeName,
-                                        new SecurityScheme()
-                                                .name(securitySchemeName)
-                                                .type(SecurityScheme.Type.HTTP)
-                                                .scheme("bearer")
-                                                .bearerFormat("JWT")
-                                )
-                );
-    }
+    return new OpenAPI()
+        .info(
+            new Info().title("API - " + "Heg").version("v1").description("Documentación de la API"))
+        .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+        .components(
+            new io.swagger.v3.oas.models.Components()
+                .addSecuritySchemes(
+                    securitySchemeName,
+                    new SecurityScheme()
+                        .name(securitySchemeName)
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
+  }
 }
