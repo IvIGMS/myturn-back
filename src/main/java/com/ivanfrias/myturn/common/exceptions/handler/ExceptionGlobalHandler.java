@@ -13,18 +13,18 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class ExceptionGlobalHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handlerNotFoundException(NotFoundException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<?> handlerNotFoundException(NotFoundException ex, WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globalException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> globalException(Exception ex, WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<?> handlerConflictException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
-    }
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<?> handlerConflictException(Exception ex, WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+  }
 }

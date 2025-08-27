@@ -2,13 +2,12 @@ package com.ivanfrias.myturn.companies.dao.models.entities;
 
 import com.ivanfrias.myturn.security.dao.models.entities.UserEntity;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -17,20 +16,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+  @Column(nullable = false, unique = true)
+  private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", nullable = false, unique = true)
-    private UserEntity owner;
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "owner_id", nullable = false, unique = true)
+  private UserEntity owner;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private List<UserEntity> users = new ArrayList<>();
+  @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+  private List<UserEntity> users = new ArrayList<>();
 
-    @Column(nullable = false, unique = true)
-    private String linkCode;
+  @Column(nullable = false, unique = true)
+  private String linkCode;
 }
