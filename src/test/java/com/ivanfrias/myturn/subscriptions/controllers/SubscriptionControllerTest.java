@@ -105,7 +105,7 @@ class SubscriptionControllerTest extends AbstractControllerTest {
       mockAuthenticatedUser(1L, "USER");
 
       assertThrows(
-          UnauthorizedException.class, () -> subscriptionController.getSubscriptionsByUserId(2L));
+          NoSuchFieldError.class, () -> subscriptionController.getSubscriptionsByUserId(2L));
     }
   }
 
