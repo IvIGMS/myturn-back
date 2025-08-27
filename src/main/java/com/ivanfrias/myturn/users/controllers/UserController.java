@@ -7,6 +7,7 @@ import com.ivanfrias.myturn.companies.services.CompanyUserService;
 import com.ivanfrias.myturn.model.UserDTO;
 import com.ivanfrias.myturn.users.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,9 @@ import static com.ivanfrias.myturn.common.exceptions.utils.ControllerUtilsConsta
 public class UserController extends ControllerUtils implements UsersApi {
     private final UserService userService;
     private final CompanyUserService companyUserService;
+
+    @Value("${info.app.version}")
+    private String appVersion;
 
     @Override
     public ResponseEntity<UserDTO> getSelfUser() {
@@ -49,6 +53,6 @@ public class UserController extends ControllerUtils implements UsersApi {
 
     @Override
     public ResponseEntity<String> getTest() {
-        return ResponseEntity.ok("Esto es un simple test con CD automatico  ");
+        return ResponseEntity.ok("Versión de la app: " + appVersion);
     }
 }

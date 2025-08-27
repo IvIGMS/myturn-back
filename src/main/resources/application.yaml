@@ -41,3 +41,7 @@ app:
     smtp-from-name: ${SMTP_FROM_NAME:}
     smtp-from-email: ${SMTP_FROM_EMAIL:}
     is-email-mocked: ${IS_EMAIL_MOCKED:false}
+
+info:
+  app:
+    version: @project.version@
