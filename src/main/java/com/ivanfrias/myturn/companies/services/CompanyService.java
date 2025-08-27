@@ -16,11 +16,6 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final ModelMapper modelMapper;
 
-    private CompanyEntity getCompanyEntityById(Long companyId) {
-        return companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotFoundException("Company not found: " + companyId));
-    }
-
     public CompanyEntity findCompanyEntityByOwnerId(Long ownerId) {
         return companyRepository.findByOwner_id(ownerId).orElse(null);
     }
