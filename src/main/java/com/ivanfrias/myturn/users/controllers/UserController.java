@@ -8,6 +8,7 @@ import com.ivanfrias.myturn.common.exceptions.utils.UnauthorizedException;
 import com.ivanfrias.myturn.companies.services.CompanyUserService;
 import com.ivanfrias.myturn.model.UserDTO;
 import com.ivanfrias.myturn.users.services.UserService;
+import com.ivanfrias.myturn.common.exceptions.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
