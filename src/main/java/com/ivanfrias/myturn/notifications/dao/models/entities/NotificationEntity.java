@@ -2,10 +2,7 @@ package com.ivanfrias.myturn.notifications.dao.models.entities;
 
 import com.ivanfrias.myturn.notifications.dao.models.enums.NotificationTypeEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -42,12 +39,14 @@ public class NotificationEntity {
     @Column(name = "is_sended")
     private Boolean isSended;
 
+    @Generated
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Generated
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
